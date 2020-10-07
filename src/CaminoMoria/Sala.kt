@@ -2,6 +2,9 @@ package CaminoMoria
 
 import kotlin.random.Random
 
+/**
+ * Objeto sala
+ */
 class Sala {
     var numSala:Int
     var peligro:Peligro=Peligro.MAGICO
@@ -23,6 +26,9 @@ class Sala {
         }
     }
 
+    /**
+     * Método toString.
+     */
     override fun toString(): String {
         return "Sala(numSala=$numSala, peligro=$peligro, poderMaligno=$poderMaligno, flechas=$flechas)"
     }

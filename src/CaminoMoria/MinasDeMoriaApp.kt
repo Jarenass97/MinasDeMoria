@@ -7,8 +7,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
+/**
+ * método ejecutable
+ */
 fun main(args: Array<String>) {
-    var date:Date = Date()
+    var date: Date = Date()
     val SALAS = 36
     val MAXPODER = 50
     val MAXFLECHAS = 30
@@ -22,12 +25,19 @@ fun main(args: Array<String>) {
     generaSalas(salas, SALAS)
     file.escribir("****************************************************\n")
     file.escribir("****************************************************\n")
-    file.escribir(date.toString()+"\n")
+    file.escribir(date.toString() + "\n")
     caminoMoria(salas, gandalf, legolas, frodo)
-    file.escribir(date.toString()+"\n")
+    file.escribir(date.toString() + "\n")
     file.cerrar()
 }
 
+/**
+ * Funcion que simula el paso de los personajes por todas las salas
+ * salas: Lista de las salas.
+ * gandalf: personaje tipo mago.
+ * legolas: personaje tipo elfo.
+ * frodo: personaje tipo hobbit.
+ */
 fun caminoMoria(salas: ArrayList<Sala>, gandalf: Mago, legolas: Elfo, frodo: Hobbit) {
     var victoria: Boolean = true
     for (i in 0..(salas.size - 1)) {
@@ -59,29 +69,34 @@ fun caminoMoria(salas: ArrayList<Sala>, gandalf: Mago, legolas: Elfo, frodo: Hob
 
 }
 
+/**
+ * Funcion que simula el paso por una sala de habilidad
+ * frodo: personaje del tipo Hobbit
+ * sala: objeto del tipo sala en la que están actualmente.
+ */
 fun salaHabilidad(frodo: Hobbit, sala: Sala) {
-    if(Random.nextInt(100)+1<=50){
+    if (Random.nextInt(100) + 1 <= 50) {
         frodo.ponerseAnillo()
-        if(Random.nextInt(100)+1<=90){
+        if (Random.nextInt(100) + 1 <= 90) {
             file.escribir("Han ganado...\n")
-        }else{
+        } else {
             file.escribir("Tratando de huir...\n")
-            if(Random.nextInt(100)+1<=80){
+            if (Random.nextInt(100) + 1 <= 80) {
                 file.escribir("Han huido con exito!\n")
-            }else{
+            } else {
                 frodo.estado = Estado.MUERTO
                 file.escribir("${frodo.nombre} ha muerto\n")
             }
         }
-    }else {
+    } else {
         frodo.quitarseAnillo()
-        if(Random.nextInt(100)+1<=20){
+        if (Random.nextInt(100) + 1 <= 20) {
             file.escribir("Han ganado...\n")
-        }else{
+        } else {
             file.escribir("Tratando de huir...\n")
-            if(Random.nextInt(100)+1<=80){
+            if (Random.nextInt(100) + 1 <= 80) {
                 file.escribir("Han huido con exito!\n")
-            }else{
+            } else {
                 frodo.estado = Estado.MUERTO
                 file.escribir("${frodo.nombre} ha muerto\n")
             }
@@ -89,6 +104,10 @@ fun salaHabilidad(frodo: Hobbit, sala: Sala) {
     }
 }
 
+/** Funcion que simula el paso por una sala de accion
+ * legolas: personaje del tipo elfo
+ * sala: objeto del tipo sala en la que están actualmente.
+ */
 fun salaAccion(legolas: Elfo, sala: Sala) {
     var flechas: Int = 0
     for (i in 1..sala.enemigos) {
@@ -114,6 +133,10 @@ fun salaAccion(legolas: Elfo, sala: Sala) {
     }
 }
 
+/** Funcion que simula el paso por una sala de magia
+ * gandalf: personaje del tipo mago
+ * sala: objeto del tipo sala en la que están actualmente.
+ */
 fun salaMagica(gandalf: Mago, sala: Sala) {
     gandalf.recargarVara(Random.nextInt(10) + 1)
     if (gandalf.poderVara() > sala.poderMaligno) {
@@ -145,6 +168,9 @@ fun salaMagica(gandalf: Mago, sala: Sala) {
     }
 }
 
+/**
+ * Método que genera el array de salas.
+ */
 fun generaSalas(salas: ArrayList<Sala>, SALAS: Int) {
     for (i in 0..(SALAS - 1)) {
         salas.add(Sala(i + 1))
