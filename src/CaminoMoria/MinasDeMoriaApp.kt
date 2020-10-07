@@ -1,15 +1,17 @@
 package CaminoMoria
 
-import Armas.Anillo
-import Armas.Carcaj
-import Armas.Vara
+import Armas.*
+import Fichero.file
 import personajes.*
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 fun main(args: Array<String>) {
+    var date:Date = Date()
     val SALAS = 36
-    val MAXPODER = 30
-    val MAXFLECHAS = 20
+    val MAXPODER = 50
+    val MAXFLECHAS = 30
     val salas = arrayListOf<Sala>()
     var vara = Vara(Random.nextInt(MAXPODER) + 1)
     var carcaj = Carcaj(Random.nextInt(MAXFLECHAS) + 1)
@@ -18,35 +20,133 @@ fun main(args: Array<String>) {
     var legolas = Elfo("Légolas", carcaj)
     var frodo = Hobbit("Frodo", anillo)
     generaSalas(salas, SALAS)
-    println(gandalf.toString())
-    println(legolas.toString())
-    println(frodo.toString())
+    file.escribir("****************************************************\n")
+    file.escribir("****************************************************\n")
+    file.escribir(date.toString()+"\n")
     caminoMoria(salas, gandalf, legolas, frodo)
+    file.escribir(date.toString()+"\n")
+    file.cerrar()
 }
 
 fun caminoMoria(salas: ArrayList<Sala>, gandalf: Mago, legolas: Elfo, frodo: Hobbit) {
+    var victoria: Boolean = true
     for (i in 0..(salas.size - 1)) {
-        println("Entrando en la sala ${i + 1}...")
-        if(gandalf.poderVara()>salas[i].poderMaligno){
-            println("Han ganado.. pasan a la sala ${i+2}")
-        }else if (gandalf.poderVara()==salas[i].poderMaligno){
+        if (gandalf.estado == Estado.VIVO && legolas.estado == Estado.VIVO && frodo.estado == Estado.VIVO) {
+            file.escribir("=================================================================\n")
+            file.escribir("Entrando en la sala ${i + 1}. Tipo de sala: ${salas[i].peligro}...\n")
+            if (salas[i].peligro.equals(Peligro.MAGICO)) {
+                salaMagica(gandalf, salas[i])
+            } else if (salas[i].peligro.equals(Peligro.ACCION)) {
+                salaAccion(legolas, salas[i])
+            } else if (salas[i].peligro.equals((Peligro.HABILIDAD))) {
+                salaHabilidad(frodo, salas[i])
+            }
+        } else {
+            file.escribir("======================================================\n")
+            file.escribir("El equipo ha sufrido bajas antes de llegar al destino.\n")
+            file.escribir("Finalizando simulación....\n")
+            file.escribir("======================================================\n")
+            victoria = false
+            break
+        }
+    }
+    if (victoria) {
+        file.escribir("========================================================\n")
+        file.escribir("El equipo ha llegado a Moria sin problemas. Enhorabuena!\n")
+        file.escribir("Finalizando simulación....\n")
+        file.escribir("========================================================\n")
+    }
 
+}
+
+fun salaHabilidad(frodo: Hobbit, sala: Sala) {
+    if(Random.nextInt(100)+1<=50){
+        frodo.ponerseAnillo()
+        if(Random.nextInt(100)+1<=90){
+            file.escribir("Han ganado...\n")
+        }else{
+            file.escribir("Tratando de huir...\n")
+            if(Random.nextInt(100)+1<=80){
+                file.escribir("Han huido con exito!\n")
+            }else{
+                frodo.estado = Estado.MUERTO
+                file.escribir("${frodo.nombre} ha muerto\n")
+            }
+        }
+    }else {
+        frodo.quitarseAnillo()
+        if(Random.nextInt(100)+1<=20){
+            file.escribir("Han ganado...\n")
+        }else{
+            file.escribir("Tratando de huir...\n")
+            if(Random.nextInt(100)+1<=80){
+                file.escribir("Han huido con exito!\n")
+            }else{
+                frodo.estado = Estado.MUERTO
+                file.escribir("${frodo.nombre} ha muerto\n")
+            }
+        }
+    }
+}
+
+fun salaAccion(legolas: Elfo, sala: Sala) {
+    var flechas: Int = 0
+    for (i in 1..sala.enemigos) {
+        if (legolas.flechas() > 0) {
+            legolas.lanzarFlecha()
+        } else {
+            file.escribir("Tratando de huir...\n")
+            if ((Random.nextInt(100) + 1) <= 80) {
+                file.escribir("Han huido con exito!\n")
+            } else {
+                legolas.estado = Estado.MUERTO
+                file.escribir("${legolas.nombre} ha muerto\n")
+            }
+            break
+        }
+        if (i == sala.enemigos) file.escribir("Han ganado...\n")
+        flechas = i
+    }
+    file.escribir("${legolas.nombre} ha disparado $flechas flecha(s), quedan ${legolas.flechas()} en el carcaj.\n")
+    if (legolas.estado == Estado.VIVO) {
+        file.escribir("${legolas.nombre} ha recogido ${sala.flechas} flechas.\n")
+        legolas.recargarCarcaj(sala.flechas)
+    }
+}
+
+fun salaMagica(gandalf: Mago, sala: Sala) {
+    gandalf.recargarVara(Random.nextInt(10) + 1)
+    if (gandalf.poderVara() > sala.poderMaligno) {
+        file.escribir("Han ganado...\n")
+    } else if (gandalf.poderVara() == sala.poderMaligno) {
+        if ((Random.nextInt(100) + 1) <= 60) {
+            file.escribir("Han ganado...\n")
+        } else {
+            file.escribir("Tratando de huir...\n")
+            if ((Random.nextInt(100) + 1) <= 80) {
+                file.escribir("Han huido con exito!\n")
+            } else {
+                gandalf.estado = Estado.MUERTO
+                file.escribir("${gandalf.nombre} ha muerto\n")
+            }
+        }
+    } else {
+        if ((Random.nextInt(100) + 1) <= 30) {
+            file.escribir("Han ganado...\n")
+        } else {
+            file.escribir("Tratando de huir...\n")
+            if ((Random.nextInt(100) + 1) <= 80) {
+                file.escribir("Han huido con exito!\n")
+            } else {
+                gandalf.estado = Estado.MUERTO
+                file.escribir("${gandalf.nombre} ha muerto\n")
+            }
         }
     }
 }
 
 fun generaSalas(salas: ArrayList<Sala>, SALAS: Int) {
-    var pel: Peligro = Peligro.MAGICO
     for (i in 0..(SALAS - 1)) {
-        var rd = Random.nextInt(3) + 1
-        if (rd == 1) {
-            pel = Peligro.HABILIDAD
-        } else if (rd == 2) {
-            pel = Peligro.ACCION
-        } else if (rd == 3) {
-            pel = Peligro.MAGICO
-        }
-        salas.add(Sala(i + 1, pel))
-        println(salas[i].toString())
+        salas.add(Sala(i + 1))
     }
 }

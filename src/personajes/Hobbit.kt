@@ -1,10 +1,12 @@
 package personajes
 
 import Armas.Anillo
+import Fichero.file
 
 class Hobbit(nombre: String, var anillo: Anillo) : Personaje(nombre, Estado.VIVO) {
     fun ponerseAnillo() {
         anillo.isPuesto = true
+        file.escribir("${this.nombre} se ha puesto el anillo.\n")
     }
 
     fun quitarseAnillo() {

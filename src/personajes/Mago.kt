@@ -1,12 +1,17 @@
 package personajes
 
 import Armas.Vara
+import Fichero.file
 
 class Mago(nombre:String,var vara:Vara) : Personaje(nombre,Estado.VIVO){
     fun recargarVara(energia:Int){
-        print("Recargando la vara en $energia")
-        vara.poder-=energia
-        println("Vara recargada, quedan ${vara.poder} puntos de poder restante")
+        if(vara.poder>0) {
+            file.escribir("Recargando la vara en $energia... ")
+            vara.poder -= energia
+            file.escribir("Vara recargada, quedan ${vara.poder} puntos de poder restante\n")
+        }else{
+            file.escribir("La vara ha agotado toda su energia y no puede ser recargada\n")
+        }
     }
     fun poderVara():Int{
         return vara.poder
