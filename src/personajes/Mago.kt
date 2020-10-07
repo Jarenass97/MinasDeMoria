@@ -32,7 +32,6 @@ class Mago(nombre:String,var vara:Vara) : Personaje(nombre,Estado.VIVO){
      * Método toString
      */
     override fun toString(): String {
-
         return super.toString()+"Mago, poderVara=${vara.poder})"
     }
 }

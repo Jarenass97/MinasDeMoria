@@ -18,7 +18,7 @@ class Elfo(nombre:String,var carcaj:Carcaj) : Personaje(nombre,Estado.VIVO) {
      * flechas: numero de flechas a recargar
      */
     fun recargarCarcaj(flechas:Int){
-        carcaj.flechas=flechas
+        carcaj.flechas+=flechas
     }
 
     /**
