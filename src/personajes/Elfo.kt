@@ -11,6 +11,6 @@ class Elfo(nombre:String,var carcaj:Carcaj) : Personaje(nombre,Estado.VIVO) {
         carcaj.flechas=flechas
     }
     override fun toString(): String {
-        return super.toString()+"Tipo=Elfo, flechas=${carcaj.flechas})"
+        return super.toString()+"Elfo, flechas=${carcaj.flechas})"
     }
 }

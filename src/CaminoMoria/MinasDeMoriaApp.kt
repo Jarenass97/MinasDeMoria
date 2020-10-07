@@ -27,7 +27,11 @@ fun main(args: Array<String>) {
 fun caminoMoria(salas: ArrayList<Sala>, gandalf: Mago, legolas: Elfo, frodo: Hobbit) {
     for (i in 0..(salas.size - 1)) {
         println("Entrando en la sala ${i + 1}...")
-        
+        if(gandalf.poderVara()>salas[i].poderMaligno){
+            println("Han ganado.. pasan a la sala ${i+2}")
+        }else if (gandalf.poderVara()==salas[i].poderMaligno){
+
+        }
     }
 }
 

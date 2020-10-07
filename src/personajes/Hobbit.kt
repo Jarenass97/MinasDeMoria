@@ -12,6 +12,6 @@ class Hobbit(nombre: String, var anillo: Anillo) : Personaje(nombre, Estado.VIVO
     }
 
     override fun toString(): String {
-        return super.toString() + "Tipo=Hobbit, AnilloPuesto=${anillo.isPuesto})"
+        return super.toString() + "Hobbit, AnilloPuesto=${anillo.isPuesto})"
     }
 }
