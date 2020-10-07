@@ -1,12 +1,19 @@
 package personajes
 
-class Mago(nombre:String,var poderVara:Int) : Personaje(nombre,Estado.VIVO){
+import Armas.Vara
+
+class Mago(nombre:String,var vara:Vara) : Personaje(nombre,Estado.VIVO){
     fun recargarVara(energia:Int){
-        this.poderVara-=energia
+        print("Recargando la vara en $energia")
+        vara.poder-=energia
+        println("Vara recargada, quedan ${vara.poder} puntos de poder restante")
+    }
+    fun poderVara():Int{
+        return vara.poder
     }
 
     override fun toString(): String {
 
-        return super.toString()+"Tipo=Mago, poderVara=$poderVara)"
+        return super.toString()+"Tipo=Mago, poderVara=${vara.poder})"
     }
 }
